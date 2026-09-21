@@ -1,0 +1,2 @@
+# Optional heavy dependencies for higher-quality local embeddings
+sentence-transformers==3.3.1

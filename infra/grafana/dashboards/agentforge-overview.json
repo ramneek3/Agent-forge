@@ -1,0 +1,105 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "title": "Agent request volume",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(rate(agent_requests_total[5m])) by (agent_name)",
+          "legendFormat": "{{agent_name}}"
+        }
+      ]
+    },
+    {
+      "title": "Agent latency (p95)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(agent_request_latency_seconds_bucket[5m])) by (le, agent_name))",
+          "legendFormat": "{{agent_name}}"
+        }
+      ]
+    },
+    {
+      "title": "Error rate",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "sum(rate(agent_errors_total[5m])) / clamp_min(sum(rate(agent_requests_total[5m])), 1e-9)",
+          "legendFormat": "error_rate"
+        }
+      ]
+    },
+    {
+      "title": "LLM token usage",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "expr": "sum(rate(llm_tokens_total[5m])) by (direction)",
+          "legendFormat": "{{direction}}"
+        }
+      ]
+    },
+    {
+      "title": "Estimated LLM cost",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "targets": [
+        {
+          "expr": "sum(rate(llm_cost_total[5m])) by (provider)",
+          "legendFormat": "{{provider}}"
+        }
+      ]
+    },
+    {
+      "title": "Tool call success/failure",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "targets": [
+        {
+          "expr": "sum(rate(tool_calls_total[5m])) by (tool, status)",
+          "legendFormat": "{{tool}} {{status}}"
+        }
+      ]
+    },
+    {
+      "title": "RAG latency",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(rag_latency_seconds_bucket[5m])) by (le))",
+          "legendFormat": "p95"
+        }
+      ]
+    },
+    {
+      "title": "Guardrail failures",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 24 },
+      "targets": [
+        {
+          "expr": "sum(rate(guardrail_failures_total[5m])) by (guardrail)",
+          "legendFormat": "{{guardrail}}"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["agentforge"],
+  "templating": { "list": [] },
+  "time": { "from": "now-1h", "to": "now" },
+  "title": "AgentForge Overview",
+  "uid": "agentforge-overview",
+  "version": 1
+}

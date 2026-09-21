@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.log
+npm-debug.log*
+
+# Environment / secrets
+.env
+.env.local
+*.pem
+credentials.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Data / uploads
+uploads/
+data/
+*.db
+*.sqlite3
+
+# Docker / k8s local
+.kube/
+minikube/
+
+# Coverage / reports
+coverage/
+.nyc_output/

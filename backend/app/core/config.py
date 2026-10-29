@@ -34,6 +34,8 @@ class Settings(BaseSettings):
 
     # CORS
     cors_origins: str = "http://localhost:5173,http://localhost:3000"
+    # Optional regex for generated hostnames, e.g. a Vercel project's production domain
+    cors_origin_regex: str = ""
 
     # LLM providers
     openai_api_key: str = ""
@@ -59,6 +61,9 @@ class Settings(BaseSettings):
 
     # Uploads
     upload_dir: str = "./uploads"
+
+    # Create a demo agent and knowledge doc on startup when the DB is empty
+    seed_demo: bool = False
 
     # Auth (simple API key for admin ops in demo)
     admin_api_key: str = "agentforge-admin-dev-key"

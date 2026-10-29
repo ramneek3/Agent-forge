@@ -18,32 +18,17 @@ class ProviderRegistry:
     def _register_defaults(self) -> None:
         settings = get_settings()
         self._providers["mock"] = MockProvider()
-        if settings.openai_api_key and not settings.llm_mock_mode:
-            self._providers["openai"] = OpenAIProvider()
-        else:
-            # Always register adapters; they fail clearly if key missing unless mock mode
-            self._providers["openai"] = (
-                MockProvider() if settings.llm_mock_mode else OpenAIProvider()
-            )
-            if settings.llm_mock_mode:
-                # Keep named mock under openai for routing demos when keys absent
-                pass
-        if settings.anthropic_api_key and not settings.llm_mock_mode:
-            self._providers["anthropic"] = AnthropicProvider()
-        else:
-            self._providers["anthropic"] = (
-                MockProvider() if settings.llm_mock_mode else AnthropicProvider()
-            )
-        if settings.google_api_key and not settings.llm_mock_mode:
-            self._providers["google"] = GeminiProvider()
-        else:
-            self._providers["google"] = (
-                MockProvider() if settings.llm_mock_mode else GeminiProvider()
-            )
-
-        # When mock mode, wrap so provider name is preserved in results
-        if settings.llm_mock_mode:
-            for name in ("openai", "anthropic", "google"):
+        # A provider is real only when its key is set and mock mode is off; otherwise a
+        # named mock stands in, so a deploy with one key (or none) still routes everywhere.
+        real = {
+            "openai": (settings.openai_api_key, OpenAIProvider),
+            "anthropic": (settings.anthropic_api_key, AnthropicProvider),
+            "google": (settings.google_api_key, GeminiProvider),
+        }
+        for name, (key, provider_cls) in real.items():
+            if key and not settings.llm_mock_mode:
+                self._providers[name] = provider_cls()
+            else:
                 self._providers[name] = _NamedMock(name)
 
     def get(self, provider: str) -> LLMProvider:

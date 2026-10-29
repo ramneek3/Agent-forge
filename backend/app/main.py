@@ -12,6 +12,7 @@ from app.core.config import get_settings
 from app.core.exceptions import AgentForgeError
 from app.core.logging import get_logger, setup_logging
 from app.core.security import rate_limit_dependency
+from app.db.seed import seed_demo_data
 from app.db.session import init_db
 from app.mcp.client import ensure_default_mcp_connected
 
@@ -24,6 +25,8 @@ async def lifespan(app: FastAPI):
     settings = get_settings()
     Path(settings.upload_dir).mkdir(parents=True, exist_ok=True)
     await init_db()
+    if settings.seed_demo:
+        await seed_demo_data()
     await ensure_default_mcp_connected()
     logger.info("agentforge_started", env=settings.app_env)
     yield
@@ -41,6 +44,7 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origin_list,
+        allow_origin_regex=settings.cors_origin_regex or None,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

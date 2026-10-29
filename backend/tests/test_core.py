@@ -191,3 +191,40 @@ async def test_evaluation_runner():
     assert case.metrics["llm_judge"]["label"].startswith("LLM-as-judge")
     agg = runner.aggregate([case])
     assert agg["n"] == 1
+
+
+def test_registry_uses_real_provider_only_when_key_set(monkeypatch):
+    from app.core.config import get_settings
+    from app.llm.providers.gemini import GeminiProvider
+    from app.llm.registry import ProviderRegistry, _NamedMock
+
+    monkeypatch.setenv("LLM_MOCK_MODE", "false")
+    monkeypatch.setenv("GOOGLE_API_KEY", "test-key")
+    monkeypatch.setenv("OPENAI_API_KEY", "")
+    get_settings.cache_clear()
+    try:
+        registry = ProviderRegistry()
+        assert isinstance(registry.get("google"), GeminiProvider)
+        assert isinstance(registry.get("openai"), _NamedMock)
+        assert registry.get("openai").name == "openai"
+    finally:
+        get_settings.cache_clear()
+
+
+@pytest.mark.asyncio
+async def test_seed_demo_data_runs_once(db_engine, monkeypatch):
+    from sqlalchemy import func, select
+    from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+
+    from app.db import seed
+    from app.models import Agent, Document
+
+    Session = async_sessionmaker(db_engine, class_=AsyncSession, expire_on_commit=False)
+    monkeypatch.setattr(seed, "AsyncSessionLocal", Session)
+    await seed.seed_demo_data()
+    await seed.seed_demo_data()
+    async with Session() as db:
+        agents = (await db.execute(select(Agent))).scalars().all()
+        assert len(agents) == 1
+        assert agents[0].production_version_id is not None
+        assert await db.scalar(select(func.count()).select_from(Document)) == 1

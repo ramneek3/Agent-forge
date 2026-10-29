@@ -25,11 +25,11 @@ MODEL_PRICING: dict[str, ModelPricing] = {
     "anthropic:claude-3-5-sonnet-20241022": ModelPricing(
         "anthropic", "claude-3-5-sonnet-20241022", 3.00, 15.00, 900, "premium"
     ),
-    "google:gemini-1.5-flash": ModelPricing(
-        "google", "gemini-1.5-flash", 0.075, 0.30, 350, "cheap"
+    "google:gemini-2.5-flash": ModelPricing(
+        "google", "gemini-2.5-flash", 0.30, 2.50, 350, "cheap"
     ),
-    "google:gemini-1.5-pro": ModelPricing(
-        "google", "gemini-1.5-pro", 1.25, 5.00, 850, "premium"
+    "google:gemini-2.5-pro": ModelPricing(
+        "google", "gemini-2.5-pro", 1.25, 10.00, 850, "premium"
     ),
     "mock:mock-fast": ModelPricing("mock", "mock-fast", 0.01, 0.02, 50, "cheap"),
     "mock:mock-smart": ModelPricing("mock", "mock-smart", 0.05, 0.10, 120, "balanced"),

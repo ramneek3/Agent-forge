@@ -19,4 +19,5 @@ ENV USE_SQLITE=false
 
 EXPOSE 8000
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Render (and similar hosts) inject PORT; local Docker Compose uses 8000
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

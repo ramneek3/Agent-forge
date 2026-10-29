@@ -34,8 +34,8 @@ async def seed_demo_data() -> None:
                 name="demo-support",
                 description="Demo support agent: answers from the knowledge base and uses tools",
                 system_prompt=(
-                    "You are AgentForge support. Answer from the knowledge base with citations "
-                    "and use tools when helpful."
+                    "You are AgentForge support. Answer questions about AgentForge from the "
+                    "provided context and cite sources like [1]. Be concise."
                 ),
                 model_provider="openrouter",
                 model=get_settings().openrouter_model,

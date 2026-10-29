@@ -351,10 +351,17 @@ class AgentRuntime:
         if state.get("mcp_results"):
             context_parts.append(f"MCP results: {state['mcp_results']}")
 
+        # Retrieval and tools have already run by this step; real models otherwise
+        # tend to emit their own tool-call JSON instead of answering.
+        final_step = (
+            "\n\nAny retrieval and tool calls have already been done and their results are "
+            "below. Answer the user directly in plain prose. Do not output tool calls or JSON."
+        )
         messages = [
             {
                 "role": "system",
                 "content": system
+                + final_step
                 + ("\n\nContext:\n" + "\n".join(context_parts) if context_parts else ""),
             },
             {"role": "user", "content": state["user_query"]},

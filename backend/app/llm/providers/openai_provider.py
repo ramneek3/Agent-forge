@@ -12,18 +12,25 @@ from app.llm.base import GenerateResult, LLMProvider, ModelInfo, TokenUsage
 
 class OpenAIProvider(LLMProvider):
     name = "openai"
+    base_url: str | None = None
+    timeout_seconds: float = 600.0
 
     def __init__(self, api_key: str | None = None):
-        self.api_key = api_key or get_settings().openai_api_key
+        self.api_key = api_key or self._default_api_key()
         self._client = None
+
+    def _default_api_key(self) -> str:
+        return get_settings().openai_api_key
 
     def _get_client(self):
         if self._client is None:
             if not self.api_key:
-                raise ProviderError("OpenAI API key not configured", provider=self.name)
+                raise ProviderError(f"{self.name} API key not configured", provider=self.name)
             from openai import AsyncOpenAI
 
-            self._client = AsyncOpenAI(api_key=self.api_key)
+            self._client = AsyncOpenAI(
+                api_key=self.api_key, base_url=self.base_url, timeout=self.timeout_seconds
+            )
         return self._client
 
     async def generate(

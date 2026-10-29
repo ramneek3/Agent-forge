@@ -31,6 +31,9 @@ MODEL_PRICING: dict[str, ModelPricing] = {
     "google:gemini-2.5-pro": ModelPricing(
         "google", "gemini-2.5-pro", 1.25, 10.00, 850, "premium"
     ),
+    "openrouter:openrouter/free": ModelPricing(
+        "openrouter", "openrouter/free", 0.0, 0.0, 4000, "cheap"
+    ),
     "mock:mock-fast": ModelPricing("mock", "mock-fast", 0.01, 0.02, 50, "cheap"),
     "mock:mock-smart": ModelPricing("mock", "mock-smart", 0.05, 0.10, 120, "balanced"),
 }

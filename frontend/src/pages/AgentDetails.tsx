@@ -68,6 +68,7 @@ export function AgentDetailsPage() {
             <option value="openai">openai</option>
             <option value="anthropic">anthropic</option>
             <option value="google">google</option>
+            <option value="openrouter">openrouter</option>
           </select>
           <label className="block text-xs text-slate-500">Model</label>
           <input

@@ -8,6 +8,7 @@ from app.llm.providers.anthropic_provider import AnthropicProvider
 from app.llm.providers.gemini import GeminiProvider
 from app.llm.providers.mock import MockProvider
 from app.llm.providers.openai_provider import OpenAIProvider
+from app.llm.providers.openrouter import OpenRouterProvider
 
 
 class ProviderRegistry:
@@ -24,6 +25,7 @@ class ProviderRegistry:
             "openai": (settings.openai_api_key, OpenAIProvider),
             "anthropic": (settings.anthropic_api_key, AnthropicProvider),
             "google": (settings.google_api_key, GeminiProvider),
+            "openrouter": (settings.openrouter_api_key, OpenRouterProvider),
         }
         for name, (key, provider_cls) in real.items():
             if key and not settings.llm_mock_mode:

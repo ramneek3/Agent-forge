@@ -2,6 +2,7 @@
 
 from sqlalchemy import func, select
 
+from app.core.config import get_settings
 from app.core.logging import get_logger
 from app.db.session import AsyncSessionLocal
 from app.models import Agent, RoutingStrategy, VersionStatus
@@ -36,8 +37,8 @@ async def seed_demo_data() -> None:
                     "You are AgentForge support. Answer from the knowledge base with citations "
                     "and use tools when helpful."
                 ),
-                model_provider="google",
-                model="gemini-2.5-flash",
+                model_provider="openrouter",
+                model=get_settings().openrouter_model,
                 routing_strategy=RoutingStrategy.FALLBACK,
                 fallback_provider="mock",
                 fallback_model="mock-fast",

@@ -196,17 +196,23 @@ async def test_evaluation_runner():
 def test_registry_uses_real_provider_only_when_key_set(monkeypatch):
     from app.core.config import get_settings
     from app.llm.providers.gemini import GeminiProvider
+    from app.llm.providers.openrouter import OpenRouterProvider
     from app.llm.registry import ProviderRegistry, _NamedMock
 
     monkeypatch.setenv("LLM_MOCK_MODE", "false")
     monkeypatch.setenv("GOOGLE_API_KEY", "test-key")
     monkeypatch.setenv("OPENAI_API_KEY", "")
+    monkeypatch.setenv("OPENROUTER_API_KEY", "test-or-key")
     get_settings.cache_clear()
     try:
         registry = ProviderRegistry()
         assert isinstance(registry.get("google"), GeminiProvider)
         assert isinstance(registry.get("openai"), _NamedMock)
         assert registry.get("openai").name == "openai"
+        openrouter = registry.get("openrouter")
+        assert isinstance(openrouter, OpenRouterProvider)
+        assert openrouter.api_key == "test-or-key"
+        assert openrouter.base_url == "https://openrouter.ai/api/v1"
     finally:
         get_settings.cache_clear()
 

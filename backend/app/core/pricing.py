@@ -31,6 +31,9 @@ MODEL_PRICING: dict[str, ModelPricing] = {
     "google:gemini-2.5-pro": ModelPricing(
         "google", "gemini-2.5-pro", 1.25, 10.00, 850, "premium"
     ),
+    "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free": ModelPricing(
+        "openrouter", "nvidia/nemotron-3-ultra-550b-a55b:free", 0.0, 0.0, 3000, "cheap"
+    ),
     "openrouter:openrouter/free": ModelPricing(
         "openrouter", "openrouter/free", 0.0, 0.0, 4000, "cheap"
     ),

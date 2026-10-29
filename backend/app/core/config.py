@@ -42,8 +42,9 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     google_api_key: str = ""
     openrouter_api_key: str = ""
-    # "openrouter/free" routes to whichever free model is available
-    openrouter_model: str = "openrouter/free"
+    # A pinned free chat model; "openrouter/free" can route to non-chat models
+    # (e.g. a safety classifier that replies "User Safety: safe")
+    openrouter_model: str = "nvidia/nemotron-3-ultra-550b-a55b:free"
     llm_mock_mode: bool = True  # mock providers when keys absent
 
     # Embeddings

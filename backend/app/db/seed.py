@@ -41,7 +41,8 @@ async def seed_demo_data() -> None:
                 routing_strategy=RoutingStrategy.FALLBACK,
                 fallback_provider="mock",
                 fallback_model="mock-fast",
-                rag_config={"enabled": True, "top_k": 5, "similarity_threshold": 0.15},
+                # Hash embeddings (no model on the free tier) score relevant chunks ~0.1-0.2
+                rag_config={"enabled": True, "top_k": 5, "similarity_threshold": 0.05},
             ),
         )
         version = (await service.get_versions(db, agent.id))[0]
